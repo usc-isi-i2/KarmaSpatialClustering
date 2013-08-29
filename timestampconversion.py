@@ -42,7 +42,7 @@
 
 
  ******************************************************************************/
- import datetime
+import datetime
 f = open("GPSData.txt")
 outputFile = open("GPSoutput.txt", 'w')
 contents = f.read()
