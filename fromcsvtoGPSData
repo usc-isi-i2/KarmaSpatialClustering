@@ -42,33 +42,22 @@
 
 
  ******************************************************************************/
+import csv
 import datetime
-filename = "SimpleLocationProbe.csv"
-f = open(filename)
-outputFile = open("GPSoutput.txt", 'w')
-contents = f.read()
-lines = contents.splitlines()
-nlines = len(lines)
-j = 1
-outputFile.write('index,time,latitude,longitude,accuracy,bearing\n')
-for i in range(nlines):
-	line = lines[i]
-	if line.count(',') >= 1:
-		newline = line.replace('|', ',')
-		idx = newline.find(',')
-		timestamp = newline[:idx]
-		newline = newline[idx+1:]
-		# idx = newline.find(',',idx+1)
-		# # dt = (datetime.datetime.fromtimestamp(float(timestamp)/1000.0) + datetime.timedelta(hours=16))
-		dt = datetime.datetime.fromtimestamp(int(timestamp)).strftime('%Y-%m-%d %H:%M:%S')
-		# dt = (datetime.datetime.fromtimestamp(float(timestamp)/1000.0) + datetime.timedelta(hours=16)).strftime("%m-%d-%Y %H:%M:%S")
-		# # ds_hour = dt.strftime("%H")
-		# # ds_day = dt.strftime("%A")
-		# # # ts = dt.strftime("%H:%M:%S %d/%m/%Y")
-		# # d = timestamp + ',' + ds_hour + ',' + ds_day
-		# # newline = '\n' + str(j) + ',' + d + newline[idx:]
-		newline = str(j) + ',' + dt + ',' + newline + '\n'
-		outputFile.write(newline)
-		j = j + 1
-f.close()
-outputFile.close()
+
+outputfile = open("GPSData.txt", 'w')
+csvfile =  open('SimpleLocationProbe.csv', 'rU')
+f = csv.DictReader(csvfile)
+single = []
+for row in f:
+    lat = row['mLatitude']
+    lng = row['mLongitude']
+    timestamp = str(int(float(row['timestamp'])))
+    accuracy = row['mAccuracy']
+    bearing = row['mBearing']
+    data = timestamp+','+lat+','+lng
+    if data not in single:
+		single.append(data)
+		outputfile.write(timestamp+','+lat+','+lng+','+accuracy+','+bearing+'\n')
+outputfile.close()
+csvfile.close()
