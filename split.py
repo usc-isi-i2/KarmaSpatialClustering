@@ -44,7 +44,7 @@
  ******************************************************************************/
 #split the data
 import datetime
-f = open("GPSoutputAll.txt")
+f = open("GPSoutput.txt")
 contents = f.read()
 lines = contents.splitlines()
 nlines = len(lines)
