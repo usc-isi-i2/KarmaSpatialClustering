@@ -1,0 +1,36 @@
+Location Identification and Prediction Using Clustering of Spatial-Temporal Data
+Summary of Summer Internship at ISI-USC
+Jin Hu
+425B Zijing #1, Tsinghua University, Beijing, China
+thuhujin@gmail.com
+1.	Introduction: 
+We have data from Huawei and also data collected by researchers at ISI-USC using the online funf.org mobile data collection app generator, which allows us to customize the app to collect all the sensor and phone running information on android phones. 
+We are now mainly using GPS data collected by our researchers, which allows us to better understand user behavior and make statistics of the accuracy of our predictions. The GPS data is collected at 3-minute interval, which can give a good description of user’s route and behavior.
+The basic challenge is how to find effective clustering algorithms which can identify significant locations where the user usually goes with the spatial-temporal data that have a lot of noise. Other problems involve while situations when users enter a building, the GPS data may get lost, or when users turn off the GPS collecting service for some reasons, also the data might be collected of different densities.
+2.	Challenges and Solutions
+To process the spatial-temporal data, our idea is to separate the data into two dimensions, i.e. we first run clustering algorithm on spatial data and find the significant locations, and then within each cluster, we run clustering algorithm again to find significant time that the user stays at the location.  Using the temporal data allow us to better understand the users’ behavior and make future predictions because we want to predict where the user is  based on user’s time and location information. Only using location may result in unwanted situations, for example, the user goes to a restaurant in the morning and then go to work, while he goes to the restaurant again in the afternoon and go back home. If we know only the user is at the restaurant, we cannot make predictions, but with time we can make reasonable predictions whether he is going to work or home. We can do this because unlike dealing with trajectories, spatial and temporal information are not heavily correlated.
+DBSCAN (Density-based spatial clustering of applications with noise) is the basic idea for clustering the spatial data. It can give reasonable clustering results if we have an idea of what the data looks like, because it needs user specified parameters. To make it more generally applicable, we do pre-processing of data so that they have basically the same format and density. Since our long aim is to predict user’s daily behavior, we split the data into each day and do Interpolate or remove trivial ones collected too frequently so that uniform parameters can work on the data. This solves the problem of varied densities. We used OPTICS (an improved algorithm of DBSCAN which can give results for parameters of certain intervals running DBSCAN) to find applicable parameters.
+Another challenge is when user enters a building or turns off the GPS service on the phone, the data has gaps for certain amount of time. We interpolate points if the user is at the same location after getting GPS again. We also check if the user has WIFI for the gap, since WIFI data can also provide location information. 
+3.	Results
+The following chat shows the result of clustering of one of our researcher’s data. (Some days are missed because data collection problem). We let the user label the raw data where he think he spends time (at least 30min) and see if the algorithm can find it.
+ 
+The following Google earth picture shows raw data sample and clustering result.
+          
+Clustering cannot identify some locations if they are sparse in the cluster and the number of points in the cluster is small. This can be improved with finer parameters and better interpolation as well as using Wifi to identify the user. The following picture gives an example of fail to identify lunch place. Other situations include when the user goes inside the building, the GPS coordinates first loses its accuracy, which result in false clusters. The following picture suggests the user stays inside the building, but the GPS coordinates are not centered.
+   
+4.	Future Work 
+The clustering algorithm should be tested on larger dataset of more users to improve the empirical parameters. More uses can also be made of the cell-tower and Wifi information collected by the phone when GPS is lost, for example, if GPS is lost and the user keeps connected to a Wifi hotspot, he probably remains at the same location. With the clustering result-the location time series-we can further explore user behavior patterns using time series analysis. 
+5.	Conclusion
+The clustering algorithm should be tested on larger dataset of more users to improve the empirical parameters. More uses can also be made of the cell-tower and
+6.	Reference
+Free-Parameters Clustering of Spatial Data with non-Uniform Density  by Dongquan Liu, NTU
+Finding Clusters of Different Sizes, Shapes, and Densities in Noisy, High Dimensional Data by Levent Ertöz, UMM
+Automatic Extraction of Clusters from Hierarchical Clustering Representations, by Jörg Sander, University of Alberta
+A Survey on Density Based Clustering Algorithms for Mining Large Spatial Databases, M.Parimala, VIT University
+Learning Significant User Locations with GPS and GSM, Xiao Yu, MIT
+An Improved Clustering Algorithm Based on Density Distribution Function, by Jianhao Tan, Hunan University
+7.	Appendix
+Besides working on location identification, I implemented the service of locating user with Wifi and cell-tower information using Google’s Database. This helps deal with the situation when GPS points are sparse. 
+For the first days, I improved Ayush’s Markov model (former intern at ISI) on predicting user’s location based on historic trajectories by adding hierarchical structure so predict large grid then small grid.
+I also worked on visualizing the data so that there are lines between points on Google earth based on time order. This helps better understand the data.  
+Finally, I want to give my sincere thanks to Professor Craig Knoblock, Professor Pedro Szekely, Professor Stutor, Professor Kristina Lerman, Ayush, Shrikanth, Alma and all other people at ISI for their help and kindness. I had a wonderful experience here. Thank you.
